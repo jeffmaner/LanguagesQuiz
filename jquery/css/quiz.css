@@ -1,0 +1,31 @@
+#latinResults, #japaneseResults, #form, #progress {
+    display: none;
+}
+header, footer {
+    padding: 0.5em;
+    color: white;
+    background-color: gray;
+    clear: left;
+}
+#left {
+  font-style: italic;
+}
+#content {
+  border-left: thin solid gray;
+  padding-left: 25px;
+}
+h1 {
+    padding: 0;
+    margin: 0;
+}
+h6 {
+    padding: 0;
+    margin: 0;
+}
+input:focus { background-color: beige; }
+td.choice {
+    margin: 0;
+    padding: 5px;
+    text-align: center;
+    border: thin solid gray;
+}

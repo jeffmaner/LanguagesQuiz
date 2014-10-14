@@ -1,0 +1,678 @@
+Elm.LanguageQuiz = Elm.LanguageQuiz || {};
+Elm.LanguageQuiz.make = function (_elm) {
+   "use strict";
+   _elm.LanguageQuiz = _elm.LanguageQuiz || {};
+   if (_elm.LanguageQuiz.values)
+   return _elm.LanguageQuiz.values;
+   var _op = {},
+   _N = Elm.Native,
+   _U = _N.Utils.make(_elm),
+   _L = _N.List.make(_elm),
+   _A = _N.Array.make(_elm),
+   _E = _N.Error.make(_elm),
+   $moduleName = "LanguageQuiz",
+   $Array = Elm.Array.make(_elm),
+   $Basics = Elm.Basics.make(_elm),
+   $Debug = Elm.Debug.make(_elm),
+   $Graphics$Element = Elm.Graphics.Element.make(_elm),
+   $Graphics$Input = Elm.Graphics.Input.make(_elm),
+   $Html = Elm.Html.make(_elm),
+   $Html$Attributes = Elm.Html.Attributes.make(_elm),
+   $Html$Events = Elm.Html.Events.make(_elm),
+   $Html$Tags = Elm.Html.Tags.make(_elm),
+   $List = Elm.List.make(_elm),
+   $Maybe = Elm.Maybe.make(_elm),
+   $Signal = Elm.Signal.make(_elm),
+   $String = Elm.String.make(_elm),
+   $Window = Elm.Window.make(_elm);
+   var moveToPreviousQuestion = function (q) {
+      return _U.replace([["currentQuestion"
+                         ,q.currentQuestion - 1]],
+      q);
+   };
+   var moveToNextQuestion = function (q) {
+      return _U.replace([["currentQuestion"
+                         ,q.currentQuestion + 1]],
+      q);
+   };
+   var Answer = function (a) {
+      return {ctor: "Answer"
+             ,_0: a};
+   };
+   var Finish = {ctor: "Finish"};
+   var ChangeTab = function (a) {
+      return {ctor: "ChangeTab"
+             ,_0: a};
+   };
+   var PreviousQuestion = {ctor: "PreviousQuestion"};
+   var NextQuestion = {ctor: "NextQuestion"};
+   var NoOp = {ctor: "NoOp"};
+   var actions = $Graphics$Input.input(NoOp);
+   var question = function (q) {
+      return function () {
+         var box = F2(function (c,g) {
+            return A2($Html$Tags.input,
+            _L.fromArray([A2($Html.attr,
+                         "type",
+                         "radio")
+                         ,$Html$Attributes.name("answer")
+                         ,$Html$Attributes.id(c)
+                         ,$Html$Attributes.value(c)
+                         ,$Html$Attributes.checked(_U.eq(c,
+                         q.qGuess))
+                         ,A2($Html$Events.onclick,
+                         actions.handle,
+                         function (_v0) {
+                            return function () {
+                               return Answer(c);
+                            }();
+                         })]),
+            _L.fromArray([]));
+         });
+         var makeTD = F2(function (g,c) {
+            return A2($Html$Tags.td,
+            _L.fromArray([$Html$Attributes.$class("choice")]),
+            _L.fromArray([A2($Html$Tags.label,
+            _L.fromArray([$Html$Attributes.id("answer0Label")
+                         ,$Html$Attributes.$for(c)]),
+            _L.fromArray([$Html.text(c)
+                         ,A2($Html$Tags.br,
+                         _L.fromArray([]),
+                         _L.fromArray([]))
+                         ,A2(box,c,g)]))]));
+         });
+         var tds = $List.map(makeTD(q.qGuess))(q.qChoices);
+         return A2($Html$Tags.div,
+         _L.fromArray([$Html$Attributes.id("questionText")]),
+         _L.fromArray([$Html.text(_L.append("What is the ",
+                      _L.append($String.show(q.qLanguage),
+                      _L.append(" word for ",
+                      _L.append(q.qText,"?")))))
+                      ,A2($Html$Tags.table,
+                      _L.fromArray([$Html.style(_L.fromArray([A2($Html.prop,
+                      "margin-bottom",
+                      "5px")]))]),
+                      _L.fromArray([A2($Html$Tags.tr,
+                      _L.fromArray([]),
+                      tds)]))]));
+      }();
+   };
+   var Question = F5(function (a,
+   b,
+   c,
+   d,
+   e) {
+      return {_: {}
+             ,qAnswer: d
+             ,qChoices: c
+             ,qGuess: e
+             ,qLanguage: a
+             ,qText: b};
+   });
+   var Latin = {ctor: "Latin"};
+   var Japanese = {ctor: "Japanese"};
+   var English = {ctor: "English"};
+   var questionsL = _L.fromArray([{_: {}
+                                  ,qAnswer: "Nox"
+                                  ,qChoices: _L.fromArray(["Iudex"
+                                                          ,"Nox"
+                                                          ,"Dies"])
+                                  ,qGuess: ""
+                                  ,qLanguage: Latin
+                                  ,qText: "night"}
+                                 ,{_: {}
+                                  ,qAnswer: "Dies"
+                                  ,qChoices: _L.fromArray(["Canis"
+                                                          ,"Agricola"
+                                                          ,"Dies"])
+                                  ,qGuess: ""
+                                  ,qLanguage: Latin
+                                  ,qText: "day"}
+                                 ,{_: {}
+                                  ,qAnswer: "Ignis"
+                                  ,qChoices: _L.fromArray(["Ignis"
+                                                          ,"Puer"
+                                                          ,"Puella"])
+                                  ,qGuess: ""
+                                  ,qLanguage: Latin
+                                  ,qText: "fire"}
+                                 ,{_: {}
+                                  ,qAnswer: "Puer"
+                                  ,qChoices: _L.fromArray(["Nox"
+                                                          ,"Puer"
+                                                          ,"Vir"])
+                                  ,qGuess: ""
+                                  ,qLanguage: Latin
+                                  ,qText: "boy"}
+                                 ,{_: {}
+                                  ,qAnswer: "Puella"
+                                  ,qChoices: _L.fromArray(["Puella"
+                                                          ,"Femina"
+                                                          ,"Virgis"])
+                                  ,qGuess: ""
+                                  ,qLanguage: Latin
+                                  ,qText: "girl"}
+                                 ,{_: {}
+                                  ,qAnswer: "Neck"
+                                  ,qChoices: _L.fromArray(["Column"
+                                                          ,"Neck"
+                                                          ,"Colon"])
+                                  ,qGuess: ""
+                                  ,qLanguage: English
+                                  ,qText: "collum"}
+                                 ,{_: {}
+                                  ,qAnswer: "Trumpet"
+                                  ,qChoices: _L.fromArray(["Trumpet"
+                                                          ,"Tuba"
+                                                          ,"Two"])
+                                  ,qGuess: ""
+                                  ,qLanguage: English
+                                  ,qText: "tuba"}
+                                 ,{_: {}
+                                  ,qAnswer: "Beware"
+                                  ,qChoices: _L.fromArray(["Cave"
+                                                          ,"Cavern"
+                                                          ,"Beware"])
+                                  ,qGuess: ""
+                                  ,qLanguage: English
+                                  ,qText: "cave"}
+                                 ,{_: {}
+                                  ,qAnswer: "Art"
+                                  ,qChoices: _L.fromArray(["Ass"
+                                                          ,"Arc"
+                                                          ,"Art"])
+                                  ,qGuess: ""
+                                  ,qLanguage: English
+                                  ,qText: "ars"}
+                                 ,{_: {}
+                                  ,qAnswer: "Voice"
+                                  ,qChoices: _L.fromArray(["Voice"
+                                                          ,"Volume"
+                                                          ,"Voracious"])
+                                  ,qGuess: ""
+                                  ,qLanguage: English
+                                  ,qText: "vox"}]);
+   var latinQuiz = {_: {}
+                   ,currentQuestion: 0
+                   ,language: Latin
+                   ,questions: questionsL};
+   var latinTab = {_: {}
+                  ,tLanguage: Latin
+                  ,tQuiz: latinQuiz
+                  ,tResults: false};
+   var questionsJ = _L.fromArray([{_: {}
+                                  ,qAnswer: "\\u3044\\u3061"
+                                  ,qChoices: _L.fromArray(["\\u3044\\u3061"
+                                                          ,"\\u306B"
+                                                          ,"\\u3055\\u3093"])
+                                  ,qGuess: ""
+                                  ,qLanguage: Japanese
+                                  ,qText: "one"}
+                                 ,{_: {}
+                                  ,qAnswer: "\\u306B"
+                                  ,qChoices: _L.fromArray(["\\u3044\\u3061"
+                                                          ,"\\u306B"
+                                                          ,"\\u3055\\u3093"])
+                                  ,qGuess: ""
+                                  ,qLanguage: Japanese
+                                  ,qText: "two"}
+                                 ,{_: {}
+                                  ,qAnswer: "\\u3055\\u3093"
+                                  ,qChoices: _L.fromArray(["\\u3044\\u3061"
+                                                          ,"\\u306B"
+                                                          ,"\\u3055\\u3093"])
+                                  ,qGuess: ""
+                                  ,qLanguage: Japanese
+                                  ,qText: "three"}
+                                 ,{_: {}
+                                  ,qAnswer: "\\u3057"
+                                  ,qChoices: _L.fromArray(["\\u3057"
+                                                          ,"\\u3054"
+                                                          ,"\\u308D\\u304F"])
+                                  ,qGuess: ""
+                                  ,qLanguage: Japanese
+                                  ,qText: "four"}
+                                 ,{_: {}
+                                  ,qAnswer: "\\u3054"
+                                  ,qChoices: _L.fromArray(["\\u3057"
+                                                          ,"\\u3054"
+                                                          ,"\\u308D\\u304F"])
+                                  ,qGuess: ""
+                                  ,qLanguage: Japanese
+                                  ,qText: "five"}
+                                 ,{_: {}
+                                  ,qAnswer: "six"
+                                  ,qChoices: _L.fromArray(["four"
+                                                          ,"five"
+                                                          ,"six"])
+                                  ,qGuess: ""
+                                  ,qLanguage: English
+                                  ,qText: "\\u308D\\u304F"}
+                                 ,{_: {}
+                                  ,qAnswer: "seven"
+                                  ,qChoices: _L.fromArray(["seven"
+                                                          ,"eight"
+                                                          ,"nine"])
+                                  ,qGuess: ""
+                                  ,qLanguage: English
+                                  ,qText: "\\u3057\\u3061"}
+                                 ,{_: {}
+                                  ,qAnswer: "eight"
+                                  ,qChoices: _L.fromArray(["seven"
+                                                          ,"eight"
+                                                          ,"nine"])
+                                  ,qGuess: ""
+                                  ,qLanguage: English
+                                  ,qText: "\\u306F\\u3061"}
+                                 ,{_: {}
+                                  ,qAnswer: "nine"
+                                  ,qChoices: _L.fromArray(["seven"
+                                                          ,"eight"
+                                                          ,"nine"])
+                                  ,qGuess: ""
+                                  ,qLanguage: English
+                                  ,qText: "\\u304F"}
+                                 ,{_: {}
+                                  ,qAnswer: "ten"
+                                  ,qChoices: _L.fromArray(["ten"
+                                                          ,"eleven"
+                                                          ,"twelve"])
+                                  ,qGuess: ""
+                                  ,qLanguage: English
+                                  ,qText: "\\u3058\\u3085\\u3046"}]);
+   var japaneseQuiz = {_: {}
+                      ,currentQuestion: 0
+                      ,language: Japanese
+                      ,questions: questionsJ};
+   var japaneseTab = {_: {}
+                     ,tLanguage: Japanese
+                     ,tQuiz: japaneseQuiz
+                     ,tResults: false};
+   var englishQuiz = {_: {}
+                     ,currentQuestion: 0
+                     ,language: English
+                     ,questions: _L.fromArray([])};
+   var introTab = {_: {}
+                  ,tLanguage: English
+                  ,tQuiz: englishQuiz
+                  ,tResults: false};
+   var initialState = {_: {}
+                      ,currentTab: introTab};
+   var startingState = initialState;
+   var Quiz = F3(function (a,b,c) {
+      return {_: {}
+             ,currentQuestion: a
+             ,language: b
+             ,questions: c};
+   });
+   var Tab = F3(function (a,b,c) {
+      return {_: {}
+             ,tLanguage: a
+             ,tQuiz: b
+             ,tResults: c};
+   });
+   var State = function (a) {
+      return {_: {},currentTab: a};
+   };
+   var nth = F2(function (n,xs) {
+      return $Array.get(n)($Array.fromList(xs));
+   });
+   var step = F2(function (action,
+   s) {
+      return function () {
+         var newQuestion = F3(function (n,
+         qs,
+         answer) {
+            return function () {
+               var q = function () {
+                  var _v2 = A2(nth,n,qs);
+                  switch (_v2.ctor)
+                  {case "Just": return _v2._0;
+                     case "Nothing": return {_: {}
+                                            ,qAnswer: ""
+                                            ,qChoices: _L.fromArray([])
+                                            ,qGuess: ""
+                                            ,qLanguage: English
+                                            ,qText: ""};}
+                  _E.Case($moduleName,
+                  "between lines 121 and 124");
+               }();
+               return _U.replace([["qGuess"
+                                  ,answer]],
+               q);
+            }();
+         });
+         var setGuess = F3(function (n,
+         qs,
+         answer) {
+            return function () {
+               var q = A3(newQuestion,
+               n,
+               qs,
+               answer);
+               var qs$ = $Array.fromList(qs);
+               return $Array.toList(A3($Array.set,
+               n,
+               q,
+               qs$));
+            }();
+         });
+         var answerQuestion = F2(function (quiz,
+         answer) {
+            return _U.replace([["questions"
+                               ,A3(setGuess,
+                               quiz.currentQuestion,
+                               quiz.questions,
+                               answer)]],
+            quiz);
+         });
+         var saveAnswer = F2(function (t,
+         answer) {
+            return _U.replace([["tQuiz"
+                               ,A2(answerQuestion,
+                               t.tQuiz,
+                               answer)]],
+            t);
+         });
+         var finishTab = function (t) {
+            return _U.replace([["tResults"
+                               ,true]],
+            t);
+         };
+         var updateTab = F2(function (f,
+         t) {
+            return _U.replace([["tQuiz"
+                               ,f(t.tQuiz)]],
+            t);
+         });
+         return function () {
+            var _v4 = A2($Debug.watch,
+            "Current action",
+            action);
+            switch (_v4.ctor)
+            {case "Answer":
+               return _U.replace([["currentTab"
+                                  ,A2(saveAnswer,
+                                  s.currentTab,
+                                  _v4._0)]],
+                 s);
+               case "ChangeTab":
+               return _U.replace([["currentTab"
+                                  ,_v4._0]],
+                 s);
+               case "Finish":
+               return _U.replace([["currentTab"
+                                  ,finishTab(s.currentTab)]],
+                 s);
+               case "NextQuestion":
+               return _U.replace([["currentTab"
+                                  ,A2(updateTab,
+                                  moveToNextQuestion,
+                                  s.currentTab)]],
+                 s);
+               case "NoOp": return s;
+               case "PreviousQuestion":
+               return _U.replace([["currentTab"
+                                  ,A2(updateTab,
+                                  moveToPreviousQuestion,
+                                  s.currentTab)]],
+                 s);}
+            _E.Case($moduleName,
+            "between lines 125 and 131");
+         }();
+      }();
+   });
+   var state = A3($Signal.foldp,
+   step,
+   startingState,
+   actions.signal);
+   var tabs = function (s) {
+      return function () {
+         var isCorrect = function (q) {
+            return _U.eq(q.qGuess,
+            q.qAnswer);
+         };
+         var questionOrResults = function (t) {
+            return function () {
+               var qs = t.tQuiz.questions;
+               var m = $String.show($List.length($List.filter(isCorrect)(qs)));
+               var n = $String.show($List.length(qs));
+               var txt = $Html.text(_L.append("You answered ",
+               _L.append(m,
+               _L.append(" out of ",
+               _L.append(n,
+               _L.append(" ",
+               _L.append($String.show(t.tLanguage),
+               " questions correctly.")))))));
+               return t.tResults ? txt : function () {
+                  var qz = t.tQuiz;
+                  return function () {
+                     var _v7 = A2(nth,
+                     qz.currentQuestion,
+                     qz.questions);
+                     switch (_v7.ctor)
+                     {case "Just":
+                        return question(_v7._0);
+                        case "Nothing": return txt;}
+                     _E.Case($moduleName,
+                     "between lines 165 and 168");
+                  }();
+               }();
+            }();
+         };
+         var questionForm = function () {
+            var qs = s.currentTab.tQuiz.questions;
+            var c = s.currentTab.tQuiz.currentQuestion;
+            var disablePrevious = $String.show(_U.cmp(c,
+            0) > 0);
+            var guess = function () {
+               var _v9 = A2(nth,c,qs);
+               switch (_v9.ctor)
+               {case "Just":
+                  return _v9._0.qGuess;
+                  case "Nothing": return "";}
+               _E.Case($moduleName,
+               "between lines 173 and 176");
+            }();
+            var disableNext = $String.show(_U.cmp(c,
+            $List.length(qs)) < 0 && !_U.eq(guess,
+            ""));
+            return A3($Html.node,
+            "form",
+            _L.fromArray([$Html$Attributes.id("form")]),
+            _L.fromArray([A2($Html$Tags.div,
+                         _L.fromArray([$Html$Attributes.id("question")]),
+                         _L.fromArray([questionOrResults(s.currentTab)]))
+                         ,A2($Html$Tags.input,
+                         _L.fromArray([A2($Html.attr,
+                                      "type",
+                                      "button")
+                                      ,$Html$Attributes.id("previous")
+                                      ,$Html$Attributes.value("Previous")
+                                      ,A2($Html.attr,
+                                      "disabled",
+                                      disablePrevious)]),
+                         _L.fromArray([]))
+                         ,A2($Html$Tags.input,
+                         _L.fromArray([A2($Html.attr,
+                                      "type",
+                                      "submit")
+                                      ,$Html$Attributes.id("next")
+                                      ,$Html$Attributes.value("Next")
+                                      ,A2($Html.attr,
+                                      "disabled",
+                                      disableNext)]),
+                         _L.fromArray([]))
+                         ,A2($Html$Tags.br,
+                         _L.fromArray([]),
+                         _L.fromArray([]))
+                         ,A2($Html$Tags.progress,
+                         _L.fromArray([$Html$Attributes.id("progress")
+                                      ,$Html$Attributes.value("0")
+                                      ,A2($Html.attr,"max","100")]),
+                         _L.fromArray([]))]));
+         }();
+         var isActive = function (quizLanguage) {
+            return _U.eq(s.currentTab.tQuiz.language,
+            quizLanguage);
+         };
+         var tabPane = function (quizLanguage) {
+            return _L.append("tab-pane",
+            isActive(quizLanguage) ? " active" : "");
+         };
+         var activeLI = function (quizLanguage) {
+            return isActive(quizLanguage) ? "active" : "inactive";
+         };
+         var makeLI = F4(function (quizLanguage,
+         hRef,
+         txt,
+         t) {
+            return A2($Html$Tags.li,
+            _L.fromArray([$Html$Attributes.$class(activeLI(quizLanguage))]),
+            _L.fromArray([A2($Html$Tags.a,
+            _L.fromArray([$Html$Attributes.href(hRef)
+                         ,A2($Html.attr,
+                         "data-toggle",
+                         "tab")
+                         ,A2($Html$Events.onclick,
+                         actions.handle,
+                         function (_v11) {
+                            return function () {
+                               return ChangeTab(t);
+                            }();
+                         })]),
+            _L.fromArray([$Html.text(txt)]))]));
+         });
+         return _L.fromArray([A2($Html$Tags.ul,
+                             _L.fromArray([$Html$Attributes.$class("nav nav-tabs")
+                                          ,$Html$Attributes.id("subjectTabs")]),
+                             _L.fromArray([A4(makeLI,
+                                          English,
+                                          "#intro",
+                                          "Introduction",
+                                          introTab)
+                                          ,A4(makeLI,
+                                          Latin,
+                                          "#latin",
+                                          "Ancient Latin",
+                                          latinTab)
+                                          ,A4(makeLI,
+                                          Japanese,
+                                          "#japanese",
+                                          "Japanese",
+                                          japaneseTab)]))
+                             ,A2($Html$Tags.div,
+                             _L.fromArray([$Html$Attributes.$class("tab-content")]),
+                             _L.fromArray([A2($Html$Tags.div,
+                                          _L.fromArray([$Html$Attributes.$class(tabPane(English))
+                                                       ,$Html$Attributes.id("intro")]),
+                                          _L.fromArray([$Html.text("Here you may take a brief quiz in Ancient Latin vocabulary, or Japanese counting from one to ten.")]))
+                                          ,A2($Html$Tags.div,
+                                          _L.fromArray([$Html$Attributes.$class(tabPane(Latin))
+                                                       ,$Html$Attributes.id("latin")]),
+                                          _L.fromArray([questionForm]))
+                                          ,A2($Html$Tags.div,
+                                          _L.fromArray([$Html$Attributes.$class(tabPane(Japanese))
+                                                       ,$Html$Attributes.id("japanese")]),
+                                          _L.fromArray([questionForm]))]))]);
+      }();
+   };
+   var view = function (s) {
+      return A2($Html$Tags.div,
+      _L.fromArray([$Html$Attributes.$class("span10")]),
+      _L.fromArray([A2($Html$Tags.section,
+      _L.fromArray([$Html$Attributes.id("content")]),
+      tabs(s))]));
+   };
+   var scene = F2(function (s,
+   _v13) {
+      return function () {
+         switch (_v13.ctor)
+         {case "_Tuple2":
+            return function () {
+                 var m = A2($Html$Tags.main$,
+                 _L.fromArray([]),
+                 _L.fromArray([A2($Html$Tags.header,
+                              _L.fromArray([$Html$Attributes.$class("language")]),
+                              _L.fromArray([A2($Html$Tags.h1,
+                              _L.fromArray([]),
+                              _L.fromArray([$Html.text("Subject Quiz")]))]))
+                              ,A2($Html$Tags.div,
+                              _L.fromArray([$Html$Attributes.$class("container-fluid")]),
+                              _L.fromArray([A2($Html$Tags.div,
+                              _L.fromArray([$Html$Attributes.$class("row-fluid")]),
+                              _L.fromArray([A2($Html$Tags.div,
+                                           _L.fromArray([$Html$Attributes.id("left")
+                                                        ,$Html$Attributes.$class("span2")]),
+                                           _L.fromArray([$Html.text("A brief quiz on Subject vocabulary implemented via HTML 5, CSS 3, and JavaScript via Elm.")]))
+                                           ,view(s)]))]))
+                              ,A2($Html$Tags.footer,
+                              _L.fromArray([]),
+                              _L.fromArray([A2($Html$Tags.h6,
+                              _L.fromArray([]),
+                              _L.fromArray([$Html.text("Programmed by Jeff Maner.")
+                                           ,A2($Html$Tags.br,
+                                           _L.fromArray([]),
+                                           _L.fromArray([]))
+                                           ,A2($Html$Tags.time,
+                                           _L.fromArray([A2($Html.attr,
+                                                        "pubdate",
+                                                        "")
+                                                        ,A2($Html.attr,
+                                                        "datetime",
+                                                        "2014-10-10")]),
+                                           _L.fromArray([$Html.text("2014 Oct 10")]))]))]))]));
+                 return A4($Graphics$Element.container,
+                 _v13._0,
+                 _v13._1,
+                 $Graphics$Element.midTop,
+                 A3($Html.toElement,
+                 _v13._0,
+                 _v13._1,
+                 m));
+              }();}
+         _E.Case($moduleName,
+         "between lines 217 and 232");
+      }();
+   });
+   var main = A3($Signal.lift2,
+   scene,
+   state,
+   $Window.dimensions);
+   _elm.LanguageQuiz.values = {_op: _op
+                              ,nth: nth
+                              ,State: State
+                              ,Tab: Tab
+                              ,Quiz: Quiz
+                              ,English: English
+                              ,Japanese: Japanese
+                              ,Latin: Latin
+                              ,Question: Question
+                              ,questionsL: questionsL
+                              ,questionsJ: questionsJ
+                              ,englishQuiz: englishQuiz
+                              ,latinQuiz: latinQuiz
+                              ,japaneseQuiz: japaneseQuiz
+                              ,introTab: introTab
+                              ,latinTab: latinTab
+                              ,japaneseTab: japaneseTab
+                              ,initialState: initialState
+                              ,NoOp: NoOp
+                              ,NextQuestion: NextQuestion
+                              ,PreviousQuestion: PreviousQuestion
+                              ,ChangeTab: ChangeTab
+                              ,Finish: Finish
+                              ,Answer: Answer
+                              ,step: step
+                              ,moveToNextQuestion: moveToNextQuestion
+                              ,moveToPreviousQuestion: moveToPreviousQuestion
+                              ,view: view
+                              ,tabs: tabs
+                              ,question: question
+                              ,main: main
+                              ,scene: scene
+                              ,state: state
+                              ,startingState: startingState
+                              ,actions: actions};
+   return _elm.LanguageQuiz.values;
+};

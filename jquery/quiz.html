@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- <meta charset="US-ASCII"> -->
+    <meta charset="utf-8">
+    <meta name="keywords" content="HTML5, JavaScript, Ancient Latin, Japanese, quiz">
+    <meta name="description" content="Ancient Latin and Japanese quizzes created in JavaScript">
+    <meta name="author" content="Jeff Maner">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- From bootstrap template. -->
+    <title>Quiz</title>
+    <link rel="stylesheet" type="text/css" href="css/quiz.css">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" media="screen">
+  </head>
+  <body>
+
+    <div id="loginModal" class="modal hide fade">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3>Login</h3>
+        <div class="modal-body">
+          <form id="loginForm">
+            <table>
+              <tr>
+                <td><label for="userID">User ID:</label></td>
+                <td><input type="text" id="userID" autofocus autocomplete="on" required placeholder="User ID"></td>
+              </tr>
+              <tr>
+                <td><label for="password">Password:</label></td>
+                <td><input type="password" id="password" autocomplete="off" required placeholder="Password"></td>
+              </tr>
+            </table>
+            <div class="modal-footer">
+              <button id="login" class="btn btn-primary" data-dismiss="modal">Login</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <header>
+      <h1><span class="subject">Subject</span> Quiz</h1>
+    </header>
+
+    <div class="container-fluid">
+      <div class="row-fluid">
+        <div id="left" class="span2">
+          A brief quiz on <span class="subject">Subject</span> vocabulary implemented via HTML 5, CSS 3,
+          and JavaScript (including jQuery, underscore, and bootstrap).
+        </div>
+        <div class="span10">
+          <section id="content">
+          <!-- The instructions say to use the user's first name. But Chrome
+               doesn't allow me to save Cookies on localhost. -->
+            <!-- <div id="welcome">Welcome.</div> -->
+            <ul class="nav nav-tabs" id="subjectTabs">
+              <li class="active"><a href="#intro" data-toggle="tab">Introduction</a></li>
+              <li><a href="#latin" data-toggle="tab">Ancient Latin</a></li>
+              <li><a href="#japanese" data-toggle="tab">Japanese</a></li>
+            </ul>
+            <div class="tab-content">
+              <div class="tab-pane active" id="intro">Here you may take a brief quiz in Ancient Latin vocabulary, or
+                  Japanese counting from one to ten.</div>
+              <div class="tab-pane" id="latinResults">You answered <span id="latinCorrect" class="text-success"></span> out of <span id="latinTotal"></span> Ancient Latin questions correctly.</div>
+              <div class="tab-pane" id="japaneseResults">You answered <span id="japaneseCorrect" class="text-success"></span> out of <span id="japaneseTotal"></span> Japanese questions correctly.</div>
+            </div>
+
+            <form id="form">
+              <div id="question"></div>
+              <input id="previous" type="button" value="Previous" disabled>
+              <input id="next" type="submit" value="Next">
+            </form>
+            <script id="question-template" type="x-handlebars-template">
+              <div id="questionText">What is the {{language}} word for "{{question}}"?</div>
+              <table style="margin-bottom: 5px;">
+                <tr>
+                  {{#each choices}}
+                  <td class="choice">
+                    <label id="answer0Label" for="{{this}}">{{this}}</label>
+                    <input type="radio" name="answer" id="{{this}}" value="{{this}}" {{check ../guess}}>
+                  </td>
+                  {{/each}}
+                </tr>
+              </table>
+            </script>
+
+            <progress id="progress" value="0" max="100"></progress>
+          </section>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      <h6>Programmed by Jeff Maner.<br>
+      <time pubdate datetime="2013-08-22">2013 Aug 22</time></h6>
+    </footer>
+
+    <script src="js/jquery-1.10.2.min.js"></script>
+    <script src="js/underscore.js"></script>
+    <script src="js/handlebars.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/login.js"></script>
+    <script>
+      //$("#loginModal").modal();
+    </script>
+    <script src="js/quiz.js"></script>
+    <noscript>JavaScript not functioning.</noscript>
+
+  </body>
+</html>
