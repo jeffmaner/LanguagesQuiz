@@ -3,9 +3,8 @@ module LanguageQuiz where
 -- $ elm --make --only-js --bundle-runtime Quiz.elm
 
 import Array (fromList, get, set, toList)
-import Debug
+--import Debug
 import Graphics.Input as Input
---import Graphics.Input (checkbox, Input, input)
 import Html
 import Html (..)
 import Html.Attributes (..)
@@ -38,7 +37,8 @@ nth n xs = get n <| fromList xs
 ---- MODEL ----
 
 -- The full application state of our quiz app.
-type State = { currentTab : Tab }
+type State = { currentTab :  Tab
+             , allTabs    : [Tab]}
 
 type Tab = { tLanguage : Language
            , tQuiz     : Quiz
@@ -93,7 +93,7 @@ latinTab    = { tLanguage=Latin   , tQuiz=latinQuiz   , tResults=False }
 japaneseTab = { tLanguage=Japanese, tQuiz=japaneseQuiz, tResults=False }
 
 initialState : State
-initialState = { currentTab=introTab }
+initialState = { currentTab=introTab, allTabs=[introTab, latinTab, japaneseTab] }
 
 
 ---- UPDATE ----
@@ -112,23 +112,25 @@ data Action = NoOp
 step : Action -> State -> State
 step action s =
      let updateTab f t = { t | tQuiz <- f t.tQuiz }
-         finishTab t = { t | tResults <- True }
-         saveAnswer t answer = { t | tQuiz <- answerQuestion t.tQuiz answer }
-         answerQuestion quiz answer = { quiz | questions <- setGuess quiz.currentQuestion quiz.questions answer }
-         setGuess n qs answer = let qs' = fromList qs
-                                    q = newQuestion n qs answer
-                                 in toList <| set n q qs'
-         newQuestion n qs answer = let q = case nth n qs of
-                                              Nothing -> { qLanguage = English, qText = "", qChoices = [], qAnswer = "", qGuess = "" }
-                                              Just r  -> r
-                                    in { q | qGuess <- answer }
-      in case Debug.watch "Current action" action of
+      in case action of
           NoOp             -> s
           NextQuestion     -> { s | currentTab <- updateTab moveToNextQuestion     s.currentTab }
           PreviousQuestion -> { s | currentTab <- updateTab moveToPreviousQuestion s.currentTab }
-          ChangeTab newTab -> { s | currentTab <- newTab }
-          Finish           -> { s | currentTab <- finishTab s.currentTab }
-          Answer answer    -> { s | currentTab <- saveAnswer s.currentTab answer }
+          ChangeTab newTab -> let saveTab c t a = if c.tLanguage==t.tLanguage then c::a else t::a
+                                  updateState t ts = { currentTab=t, allTabs=ts }
+                               in updateState newTab <| reverse <| foldl (\t->saveTab s.currentTab t) [] s.allTabs
+          Finish           -> let finishTab t = { t | tResults <- True }
+                               in { s | currentTab <- finishTab s.currentTab }
+          Answer answer    -> let saveAnswer t answer = { t | tQuiz <- answerQuestion t.tQuiz answer }
+                                  answerQuestion quiz answer = { quiz | questions <- setGuess quiz.currentQuestion quiz.questions answer }
+                                  setGuess n qs answer = let qs' = fromList qs
+                                                             q = newQuestion n qs answer
+                                                          in toList <| set n q qs'
+                                  newQuestion n qs answer = let q = case nth n qs of
+                                                                       Nothing -> { qLanguage = English, qText = "", qChoices = [], qAnswer = "", qGuess = "" }
+                                                                       Just r  -> r
+                                                             in { q | qGuess <- answer }
+                              in { s | currentTab <- saveAnswer s.currentTab answer }
 
 moveToNextQuestion     : Quiz -> Quiz
 moveToNextQuestion     q = { q | currentQuestion <- q.currentQuestion + 1 }
@@ -168,8 +170,8 @@ tabs s =
       questionForm =
         let c = s.currentTab.tQuiz.currentQuestion
             qs = s.currentTab.tQuiz.questions
-            disablePrevious = c > 0 |> show
-            disableNext     = c < length qs && guess /= "" |> show
+            disablePrevious = c < 1
+            disableNext     = c > length qs || guess == ""
             guess = case nth c qs of
                       Nothing -> ""
                       Just q  -> q.qGuess
@@ -177,15 +179,16 @@ tabs s =
                  [ id "form" ]
                  [ div [ id "question" ]
                        [ questionOrResults s.currentTab ],
-                   input [ attr "type" "button", id "previous", value "Previous", attr "disabled" disablePrevious ] [],
-                   input [ attr "type" "submit", id "next"    , value "Next"    , attr "disabled" disableNext     ] [],
+                   input [ attr "type" "button", id "previous", value "Previous", onclick actions.handle (\_->PreviousQuestion), disabled disablePrevious ] [],
+                   input [ attr "type" "button", id "next"    , value "Next"    , onclick actions.handle (\_->NextQuestion)    , disabled disableNext     ] [],
                    br [] [],
                    progress [ id "progress", value "0", attr "max" "100" ] [] ]
+      tab lang = head <| filter (\t->t.tLanguage==lang) s.allTabs
 
    in [ ul [ class "nav nav-tabs", id "subjectTabs" ]
-           [ makeLI English  "#intro"    "Introduction"  introTab,
-             makeLI Latin    "#latin"    "Ancient Latin" latinTab,
-             makeLI Japanese "#japanese" "Japanese"      japaneseTab ],
+           [ makeLI English  "#intro"    "Introduction"  <| tab English,
+             makeLI Latin    "#latin"    "Ancient Latin" <| tab Latin  ,
+             makeLI Japanese "#japanese" "Japanese"      <| tab Japanese ],
         div [ class "tab-content" ]
             [ div [ class <| tabPane English, id "intro" ]
                   [ text "Here you may take a brief quiz in Ancient Latin vocabulary, or Japanese counting from one to ten." ],
@@ -214,21 +217,22 @@ main = lift2 scene state Window.dimensions
 
 scene : State -> (Int,Int) -> Element
 scene s (w,h) =
-  let m = main' [] -- TODO: use node instead of main'?
+  let subject t = if t.tLanguage==English then "" else show t.tLanguage
+      m = main' [] -- TODO: use node instead of main'?
                 [ header [ class "language" ]
-                         [ h1 [] [ text "Subject Quiz" ] ],
+                         [ h1 [] [ text <| subject s.currentTab ++ " Quiz" ] ],
                   div [ class "container-fluid" ]
                       [ div [ class "row-fluid" ]
                             [ div [ id "left", class "span2" ] -- "col-xs-2"
-                                  [ text "A brief quiz on Subject vocabulary implemented via HTML 5, CSS 3, and JavaScript via Elm." ],
+                                  [ text <| "A brief quiz on " ++ subject s.currentTab ++ " vocabulary implemented via HTML 5, CSS 3, and JavaScript via Elm." ],
                               view s ] ],
                   footer []
                          [ h6 []
                               [ text "Programmed by Jeff Maner.",
                                 br [] [],
                                 time [ attr "pubdate" "",
-                                       attr "datetime" "2014-10-10" ]
-                                [ text "2014 Oct 10" ] ] ] ]
+                                       attr "datetime" "2014-10-15" ]
+                                [ text "2014 Oct 15" ] ] ] ]
    in container w h midTop (Html.toElement w h m)
 
 -- manage the state of our application over time

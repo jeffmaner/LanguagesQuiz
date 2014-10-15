@@ -13,7 +13,6 @@ Elm.LanguageQuiz.make = function (_elm) {
    $moduleName = "LanguageQuiz",
    $Array = Elm.Array.make(_elm),
    $Basics = Elm.Basics.make(_elm),
-   $Debug = Elm.Debug.make(_elm),
    $Graphics$Element = Elm.Graphics.Element.make(_elm),
    $Graphics$Input = Elm.Graphics.Input.make(_elm),
    $Html = Elm.Html.make(_elm),
@@ -297,6 +296,9 @@ Elm.LanguageQuiz.make = function (_elm) {
                   ,tQuiz: englishQuiz
                   ,tResults: false};
    var initialState = {_: {}
+                      ,allTabs: _L.fromArray([introTab
+                                             ,latinTab
+                                             ,japaneseTab])
                       ,currentTab: introTab};
    var startingState = initialState;
    var Quiz = F3(function (a,b,c) {
@@ -311,74 +313,17 @@ Elm.LanguageQuiz.make = function (_elm) {
              ,tQuiz: b
              ,tResults: c};
    });
-   var State = function (a) {
-      return {_: {},currentTab: a};
-   };
+   var State = F2(function (a,b) {
+      return {_: {}
+             ,allTabs: b
+             ,currentTab: a};
+   });
    var nth = F2(function (n,xs) {
       return $Array.get(n)($Array.fromList(xs));
    });
    var step = F2(function (action,
    s) {
       return function () {
-         var newQuestion = F3(function (n,
-         qs,
-         answer) {
-            return function () {
-               var q = function () {
-                  var _v2 = A2(nth,n,qs);
-                  switch (_v2.ctor)
-                  {case "Just": return _v2._0;
-                     case "Nothing": return {_: {}
-                                            ,qAnswer: ""
-                                            ,qChoices: _L.fromArray([])
-                                            ,qGuess: ""
-                                            ,qLanguage: English
-                                            ,qText: ""};}
-                  _E.Case($moduleName,
-                  "between lines 121 and 124");
-               }();
-               return _U.replace([["qGuess"
-                                  ,answer]],
-               q);
-            }();
-         });
-         var setGuess = F3(function (n,
-         qs,
-         answer) {
-            return function () {
-               var q = A3(newQuestion,
-               n,
-               qs,
-               answer);
-               var qs$ = $Array.fromList(qs);
-               return $Array.toList(A3($Array.set,
-               n,
-               q,
-               qs$));
-            }();
-         });
-         var answerQuestion = F2(function (quiz,
-         answer) {
-            return _U.replace([["questions"
-                               ,A3(setGuess,
-                               quiz.currentQuestion,
-                               quiz.questions,
-                               answer)]],
-            quiz);
-         });
-         var saveAnswer = F2(function (t,
-         answer) {
-            return _U.replace([["tQuiz"
-                               ,A2(answerQuestion,
-                               t.tQuiz,
-                               answer)]],
-            t);
-         });
-         var finishTab = function (t) {
-            return _U.replace([["tResults"
-                               ,true]],
-            t);
-         };
          var updateTab = F2(function (f,
          t) {
             return _U.replace([["tQuiz"
@@ -386,24 +331,105 @@ Elm.LanguageQuiz.make = function (_elm) {
             t);
          });
          return function () {
-            var _v4 = A2($Debug.watch,
-            "Current action",
-            action);
-            switch (_v4.ctor)
+            switch (action.ctor)
             {case "Answer":
-               return _U.replace([["currentTab"
-                                  ,A2(saveAnswer,
-                                  s.currentTab,
-                                  _v4._0)]],
-                 s);
+               return function () {
+                    var newQuestion = F3(function (n,
+                    qs,
+                    answer) {
+                       return function () {
+                          var q = function () {
+                             var _v5 = A2(nth,n,qs);
+                             switch (_v5.ctor)
+                             {case "Just": return _v5._0;
+                                case "Nothing": return {_: {}
+                                                       ,qAnswer: ""
+                                                       ,qChoices: _L.fromArray([])
+                                                       ,qGuess: ""
+                                                       ,qLanguage: English
+                                                       ,qText: ""};}
+                             _E.Case($moduleName,
+                             "between lines 129 and 132");
+                          }();
+                          return _U.replace([["qGuess"
+                                             ,answer]],
+                          q);
+                       }();
+                    });
+                    var setGuess = F3(function (n,
+                    qs,
+                    answer) {
+                       return function () {
+                          var q = A3(newQuestion,
+                          n,
+                          qs,
+                          answer);
+                          var qs$ = $Array.fromList(qs);
+                          return $Array.toList(A3($Array.set,
+                          n,
+                          q,
+                          qs$));
+                       }();
+                    });
+                    var answerQuestion = F2(function (quiz,
+                    answer) {
+                       return _U.replace([["questions"
+                                          ,A3(setGuess,
+                                          quiz.currentQuestion,
+                                          quiz.questions,
+                                          answer)]],
+                       quiz);
+                    });
+                    var saveAnswer = F2(function (t,
+                    answer) {
+                       return _U.replace([["tQuiz"
+                                          ,A2(answerQuestion,
+                                          t.tQuiz,
+                                          answer)]],
+                       t);
+                    });
+                    return _U.replace([["currentTab"
+                                       ,A2(saveAnswer,
+                                       s.currentTab,
+                                       action._0)]],
+                    s);
+                 }();
                case "ChangeTab":
-               return _U.replace([["currentTab"
-                                  ,_v4._0]],
-                 s);
+               return function () {
+                    var updateState = F2(function (t,
+                    ts) {
+                       return {_: {}
+                              ,allTabs: ts
+                              ,currentTab: t};
+                    });
+                    var saveTab = F3(function (c,
+                    t,
+                    a) {
+                       return _U.eq(c.tLanguage,
+                       t.tLanguage) ? A2($List._op["::"],
+                       c,
+                       a) : A2($List._op["::"],t,a);
+                    });
+                    return updateState(action._0)($List.reverse(A3($List.foldl,
+                    function (t) {
+                       return A2(saveTab,
+                       s.currentTab,
+                       t);
+                    },
+                    _L.fromArray([]),
+                    s.allTabs)));
+                 }();
                case "Finish":
-               return _U.replace([["currentTab"
-                                  ,finishTab(s.currentTab)]],
-                 s);
+               return function () {
+                    var finishTab = function (t) {
+                       return _U.replace([["tResults"
+                                          ,true]],
+                       t);
+                    };
+                    return _U.replace([["currentTab"
+                                       ,finishTab(s.currentTab)]],
+                    s);
+                 }();
                case "NextQuestion":
                return _U.replace([["currentTab"
                                   ,A2(updateTab,
@@ -418,7 +444,7 @@ Elm.LanguageQuiz.make = function (_elm) {
                                   s.currentTab)]],
                  s);}
             _E.Case($moduleName,
-            "between lines 125 and 131");
+            "between lines 115 and 133");
          }();
       }();
    });
@@ -428,6 +454,14 @@ Elm.LanguageQuiz.make = function (_elm) {
    actions.signal);
    var tabs = function (s) {
       return function () {
+         var tab = function (lang) {
+            return $List.head(A2($List.filter,
+            function (t) {
+               return _U.eq(t.tLanguage,
+               lang);
+            },
+            s.allTabs));
+         };
          var isCorrect = function (q) {
             return _U.eq(q.qGuess,
             q.qAnswer);
@@ -455,7 +489,7 @@ Elm.LanguageQuiz.make = function (_elm) {
                         return question(_v7._0);
                         case "Nothing": return txt;}
                      _E.Case($moduleName,
-                     "between lines 165 and 168");
+                     "between lines 167 and 170");
                   }();
                }();
             }();
@@ -463,8 +497,8 @@ Elm.LanguageQuiz.make = function (_elm) {
          var questionForm = function () {
             var qs = s.currentTab.tQuiz.questions;
             var c = s.currentTab.tQuiz.currentQuestion;
-            var disablePrevious = $String.show(_U.cmp(c,
-            0) > 0);
+            var disablePrevious = _U.cmp(c,
+            1) < 0;
             var guess = function () {
                var _v9 = A2(nth,c,qs);
                switch (_v9.ctor)
@@ -472,11 +506,11 @@ Elm.LanguageQuiz.make = function (_elm) {
                   return _v9._0.qGuess;
                   case "Nothing": return "";}
                _E.Case($moduleName,
-               "between lines 173 and 176");
+               "between lines 175 and 178");
             }();
-            var disableNext = $String.show(_U.cmp(c,
-            $List.length(qs)) < 0 && !_U.eq(guess,
-            ""));
+            var disableNext = _U.cmp(c,
+            $List.length(qs)) > 0 || _U.eq(guess,
+            "");
             return A3($Html.node,
             "form",
             _L.fromArray([$Html$Attributes.id("form")]),
@@ -489,19 +523,29 @@ Elm.LanguageQuiz.make = function (_elm) {
                                       "button")
                                       ,$Html$Attributes.id("previous")
                                       ,$Html$Attributes.value("Previous")
-                                      ,A2($Html.attr,
-                                      "disabled",
-                                      disablePrevious)]),
+                                      ,A2($Html$Events.onclick,
+                                      actions.handle,
+                                      function (_v11) {
+                                         return function () {
+                                            return PreviousQuestion;
+                                         }();
+                                      })
+                                      ,$Html$Attributes.disabled(disablePrevious)]),
                          _L.fromArray([]))
                          ,A2($Html$Tags.input,
                          _L.fromArray([A2($Html.attr,
                                       "type",
-                                      "submit")
+                                      "button")
                                       ,$Html$Attributes.id("next")
                                       ,$Html$Attributes.value("Next")
-                                      ,A2($Html.attr,
-                                      "disabled",
-                                      disableNext)]),
+                                      ,A2($Html$Events.onclick,
+                                      actions.handle,
+                                      function (_v13) {
+                                         return function () {
+                                            return NextQuestion;
+                                         }();
+                                      })
+                                      ,$Html$Attributes.disabled(disableNext)]),
                          _L.fromArray([]))
                          ,A2($Html$Tags.br,
                          _L.fromArray([]),
@@ -536,7 +580,7 @@ Elm.LanguageQuiz.make = function (_elm) {
                          "tab")
                          ,A2($Html$Events.onclick,
                          actions.handle,
-                         function (_v11) {
+                         function (_v15) {
                             return function () {
                                return ChangeTab(t);
                             }();
@@ -546,21 +590,18 @@ Elm.LanguageQuiz.make = function (_elm) {
          return _L.fromArray([A2($Html$Tags.ul,
                              _L.fromArray([$Html$Attributes.$class("nav nav-tabs")
                                           ,$Html$Attributes.id("subjectTabs")]),
-                             _L.fromArray([A4(makeLI,
+                             _L.fromArray([A3(makeLI,
                                           English,
                                           "#intro",
-                                          "Introduction",
-                                          introTab)
-                                          ,A4(makeLI,
+                                          "Introduction")(tab(English))
+                                          ,A3(makeLI,
                                           Latin,
                                           "#latin",
-                                          "Ancient Latin",
-                                          latinTab)
-                                          ,A4(makeLI,
+                                          "Ancient Latin")(tab(Latin))
+                                          ,A3(makeLI,
                                           Japanese,
                                           "#japanese",
-                                          "Japanese",
-                                          japaneseTab)]))
+                                          "Japanese")(tab(Japanese))]))
                              ,A2($Html$Tags.div,
                              _L.fromArray([$Html$Attributes.$class("tab-content")]),
                              _L.fromArray([A2($Html$Tags.div,
@@ -585,18 +626,23 @@ Elm.LanguageQuiz.make = function (_elm) {
       tabs(s))]));
    };
    var scene = F2(function (s,
-   _v13) {
+   _v17) {
       return function () {
-         switch (_v13.ctor)
+         switch (_v17.ctor)
          {case "_Tuple2":
             return function () {
+                 var subject = function (t) {
+                    return _U.eq(t.tLanguage,
+                    English) ? "" : $String.show(t.tLanguage);
+                 };
                  var m = A2($Html$Tags.main$,
                  _L.fromArray([]),
                  _L.fromArray([A2($Html$Tags.header,
                               _L.fromArray([$Html$Attributes.$class("language")]),
                               _L.fromArray([A2($Html$Tags.h1,
                               _L.fromArray([]),
-                              _L.fromArray([$Html.text("Subject Quiz")]))]))
+                              _L.fromArray([$Html.text(_L.append(subject(s.currentTab),
+                              " Quiz"))]))]))
                               ,A2($Html$Tags.div,
                               _L.fromArray([$Html$Attributes.$class("container-fluid")]),
                               _L.fromArray([A2($Html$Tags.div,
@@ -604,7 +650,9 @@ Elm.LanguageQuiz.make = function (_elm) {
                               _L.fromArray([A2($Html$Tags.div,
                                            _L.fromArray([$Html$Attributes.id("left")
                                                         ,$Html$Attributes.$class("span2")]),
-                                           _L.fromArray([$Html.text("A brief quiz on Subject vocabulary implemented via HTML 5, CSS 3, and JavaScript via Elm.")]))
+                                           _L.fromArray([$Html.text(_L.append("A brief quiz on ",
+                                           _L.append(subject(s.currentTab),
+                                           " vocabulary implemented via HTML 5, CSS 3, and JavaScript via Elm.")))]))
                                            ,view(s)]))]))
                               ,A2($Html$Tags.footer,
                               _L.fromArray([]),
@@ -620,19 +668,19 @@ Elm.LanguageQuiz.make = function (_elm) {
                                                         "")
                                                         ,A2($Html.attr,
                                                         "datetime",
-                                                        "2014-10-10")]),
-                                           _L.fromArray([$Html.text("2014 Oct 10")]))]))]))]));
+                                                        "2014-10-15")]),
+                                           _L.fromArray([$Html.text("2014 Oct 15")]))]))]))]));
                  return A4($Graphics$Element.container,
-                 _v13._0,
-                 _v13._1,
+                 _v17._0,
+                 _v17._1,
                  $Graphics$Element.midTop,
                  A3($Html.toElement,
-                 _v13._0,
-                 _v13._1,
+                 _v17._0,
+                 _v17._1,
                  m));
               }();}
          _E.Case($moduleName,
-         "between lines 217 and 232");
+         "between lines 220 and 236");
       }();
    });
    var main = A3($Signal.lift2,
