@@ -2294,7 +2294,9 @@ Elm.LanguageQuiz.make = function (_elm) {
          };
          var questionForm = function () {
             var qs = s.currentTab.tQuiz.questions;
+            var n = $List.length(qs);
             var c = s.currentTab.tQuiz.currentQuestion;
+            var prog = $String.show(100 * c / n | 0);
             var disablePrevious = _U.cmp(c,
             1) < 0;
             var guess = function () {
@@ -2304,11 +2306,10 @@ Elm.LanguageQuiz.make = function (_elm) {
                   return _v9._0.qGuess;
                   case "Nothing": return "";}
                _E.Case($moduleName,
-               "between lines 175 and 178");
+               "between lines 177 and 180");
             }();
             var disableNext = _U.cmp(c,
-            $List.length(qs)) > 0 || _U.eq(guess,
-            "");
+            n) > 0 || _U.eq(guess,"");
             return A3($Html.node,
             "form",
             _L.fromArray([$Html$Attributes.id("form")]),
@@ -2350,7 +2351,7 @@ Elm.LanguageQuiz.make = function (_elm) {
                          _L.fromArray([]))
                          ,A2($Html$Tags.progress,
                          _L.fromArray([$Html$Attributes.id("progress")
-                                      ,$Html$Attributes.value("0")
+                                      ,$Html$Attributes.value(prog)
                                       ,A2($Html.attr,"max","100")]),
                          _L.fromArray([]))]));
          }();
@@ -2478,7 +2479,7 @@ Elm.LanguageQuiz.make = function (_elm) {
                  m));
               }();}
          _E.Case($moduleName,
-         "between lines 220 and 236");
+         "between lines 222 and 238");
       }();
    });
    var main = A3($Signal.lift2,

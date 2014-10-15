@@ -170,8 +170,10 @@ tabs s =
       questionForm =
         let c = s.currentTab.tQuiz.currentQuestion
             qs = s.currentTab.tQuiz.questions
+            n = length qs
+            prog = 100 * c // n |> show
             disablePrevious = c < 1
-            disableNext     = c > length qs || guess == ""
+            disableNext     = c > n || guess == ""
             guess = case nth c qs of
                       Nothing -> ""
                       Just q  -> q.qGuess
@@ -182,7 +184,7 @@ tabs s =
                    input [ attr "type" "button", id "previous", value "Previous", onclick actions.handle (\_->PreviousQuestion), disabled disablePrevious ] [],
                    input [ attr "type" "button", id "next"    , value "Next"    , onclick actions.handle (\_->NextQuestion)    , disabled disableNext     ] [],
                    br [] [],
-                   progress [ id "progress", value "0", attr "max" "100" ] [] ]
+                   progress [ id "progress", value prog, attr "max" "100" ] [] ]
       tab lang = head <| filter (\t->t.tLanguage==lang) s.allTabs
 
    in [ ul [ class "nav nav-tabs", id "subjectTabs" ]
