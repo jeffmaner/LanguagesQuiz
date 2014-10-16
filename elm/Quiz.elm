@@ -72,16 +72,16 @@ questionsL = [
 
 
 questionsJ = [
-  { qLanguage = Japanese, qText = "one"                  , qChoices = ["\\u3044\\u3061", "\\u306B", "\\u3055\\u3093"], qAnswer = "\\u3044\\u3061", qGuess = "" },
-  { qLanguage = Japanese, qText = "two"                  , qChoices = ["\\u3044\\u3061", "\\u306B", "\\u3055\\u3093"], qAnswer = "\\u306B"       , qGuess = "" },
-  { qLanguage = Japanese, qText = "three"                , qChoices = ["\\u3044\\u3061", "\\u306B", "\\u3055\\u3093"], qAnswer = "\\u3055\\u3093", qGuess = "" },
-  { qLanguage = Japanese, qText = "four"                 , qChoices = ["\\u3057", "\\u3054", "\\u308D\\u304F"]       , qAnswer = "\\u3057"       , qGuess = "" },
-  { qLanguage = Japanese, qText = "five"                 , qChoices = ["\\u3057", "\\u3054", "\\u308D\\u304F"]       , qAnswer = "\\u3054"       , qGuess = "" },
-  { qLanguage = English , qText = "\\u308D\\u304F"       , qChoices = ["four", "five", "six"]                        , qAnswer = "six"           , qGuess = "" },
-  { qLanguage = English , qText = "\\u3057\\u3061"       , qChoices = ["seven", "eight", "nine"]                     , qAnswer = "seven"         , qGuess = "" },
-  { qLanguage = English , qText = "\\u306F\\u3061"       , qChoices = ["seven", "eight", "nine"]                     , qAnswer = "eight"         , qGuess = "" },
-  { qLanguage = English , qText = "\\u304F"              , qChoices = ["seven", "eight", "nine"]                     , qAnswer = "nine"          , qGuess = "" },
-  { qLanguage = English , qText = "\\u3058\\u3085\\u3046", qChoices = ["ten", "eleven", "twelve"]                    , qAnswer = "ten"           , qGuess = "" } ]
+  { qLanguage = Japanese, qText = "one"   , qChoices = ["いち", "に", "さん"]     , qAnswer = "いち" , qGuess = "" },
+  { qLanguage = Japanese, qText = "two"   , qChoices = ["いち", "に", "さん"]     , qAnswer = "に"   , qGuess = "" },
+  { qLanguage = Japanese, qText = "three" , qChoices = ["いち", "に", "さん"]     , qAnswer = "さん" , qGuess = "" },
+  { qLanguage = Japanese, qText = "four"  , qChoices = ["し", "ご", "ろく"]       , qAnswer = "し"   , qGuess = "" },
+  { qLanguage = Japanese, qText = "five"  , qChoices = ["し", "ご", "ろく"]       , qAnswer = "ご"   , qGuess = "" },
+  { qLanguage = English , qText = "ろく"  , qChoices = ["four", "five", "six"]    , qAnswer = "six"  , qGuess = "" },
+  { qLanguage = English , qText = "しち"  , qChoices = ["seven", "eight", "nine"] , qAnswer = "seven", qGuess = "" },
+  { qLanguage = English , qText = "はち"  , qChoices = ["seven", "eight", "nine"] , qAnswer = "eight", qGuess = "" },
+  { qLanguage = English , qText = "く"    , qChoices = ["seven", "eight", "nine"] , qAnswer = "nine" , qGuess = "" },
+  { qLanguage = English , qText = "じゅう", qChoices = ["ten", "eleven", "twelve"], qAnswer = "ten"  , qGuess = "" } ]
 
 
 englishQuiz  = { currentQuestion=0, language=English , questions=[]         }

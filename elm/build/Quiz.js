@@ -1998,42 +1998,42 @@ Elm.LanguageQuiz.make = function (_elm) {
                   ,tQuiz: latinQuiz
                   ,tResults: false};
    var questionsJ = _L.fromArray([{_: {}
-                                  ,qAnswer: "\\u3044\\u3061"
-                                  ,qChoices: _L.fromArray(["\\u3044\\u3061"
-                                                          ,"\\u306B"
-                                                          ,"\\u3055\\u3093"])
+                                  ,qAnswer: "いち"
+                                  ,qChoices: _L.fromArray(["いち"
+                                                          ,"に"
+                                                          ,"さん"])
                                   ,qGuess: ""
                                   ,qLanguage: Japanese
                                   ,qText: "one"}
                                  ,{_: {}
-                                  ,qAnswer: "\\u306B"
-                                  ,qChoices: _L.fromArray(["\\u3044\\u3061"
-                                                          ,"\\u306B"
-                                                          ,"\\u3055\\u3093"])
+                                  ,qAnswer: "に"
+                                  ,qChoices: _L.fromArray(["いち"
+                                                          ,"に"
+                                                          ,"さん"])
                                   ,qGuess: ""
                                   ,qLanguage: Japanese
                                   ,qText: "two"}
                                  ,{_: {}
-                                  ,qAnswer: "\\u3055\\u3093"
-                                  ,qChoices: _L.fromArray(["\\u3044\\u3061"
-                                                          ,"\\u306B"
-                                                          ,"\\u3055\\u3093"])
+                                  ,qAnswer: "さん"
+                                  ,qChoices: _L.fromArray(["いち"
+                                                          ,"に"
+                                                          ,"さん"])
                                   ,qGuess: ""
                                   ,qLanguage: Japanese
                                   ,qText: "three"}
                                  ,{_: {}
-                                  ,qAnswer: "\\u3057"
-                                  ,qChoices: _L.fromArray(["\\u3057"
-                                                          ,"\\u3054"
-                                                          ,"\\u308D\\u304F"])
+                                  ,qAnswer: "し"
+                                  ,qChoices: _L.fromArray(["し"
+                                                          ,"ご"
+                                                          ,"ろく"])
                                   ,qGuess: ""
                                   ,qLanguage: Japanese
                                   ,qText: "four"}
                                  ,{_: {}
-                                  ,qAnswer: "\\u3054"
-                                  ,qChoices: _L.fromArray(["\\u3057"
-                                                          ,"\\u3054"
-                                                          ,"\\u308D\\u304F"])
+                                  ,qAnswer: "ご"
+                                  ,qChoices: _L.fromArray(["し"
+                                                          ,"ご"
+                                                          ,"ろく"])
                                   ,qGuess: ""
                                   ,qLanguage: Japanese
                                   ,qText: "five"}
@@ -2044,7 +2044,7 @@ Elm.LanguageQuiz.make = function (_elm) {
                                                           ,"six"])
                                   ,qGuess: ""
                                   ,qLanguage: English
-                                  ,qText: "\\u308D\\u304F"}
+                                  ,qText: "ろく"}
                                  ,{_: {}
                                   ,qAnswer: "seven"
                                   ,qChoices: _L.fromArray(["seven"
@@ -2052,7 +2052,7 @@ Elm.LanguageQuiz.make = function (_elm) {
                                                           ,"nine"])
                                   ,qGuess: ""
                                   ,qLanguage: English
-                                  ,qText: "\\u3057\\u3061"}
+                                  ,qText: "しち"}
                                  ,{_: {}
                                   ,qAnswer: "eight"
                                   ,qChoices: _L.fromArray(["seven"
@@ -2060,7 +2060,7 @@ Elm.LanguageQuiz.make = function (_elm) {
                                                           ,"nine"])
                                   ,qGuess: ""
                                   ,qLanguage: English
-                                  ,qText: "\\u306F\\u3061"}
+                                  ,qText: "はち"}
                                  ,{_: {}
                                   ,qAnswer: "nine"
                                   ,qChoices: _L.fromArray(["seven"
@@ -2068,7 +2068,7 @@ Elm.LanguageQuiz.make = function (_elm) {
                                                           ,"nine"])
                                   ,qGuess: ""
                                   ,qLanguage: English
-                                  ,qText: "\\u304F"}
+                                  ,qText: "く"}
                                  ,{_: {}
                                   ,qAnswer: "ten"
                                   ,qChoices: _L.fromArray(["ten"
@@ -2076,7 +2076,7 @@ Elm.LanguageQuiz.make = function (_elm) {
                                                           ,"twelve"])
                                   ,qGuess: ""
                                   ,qLanguage: English
-                                  ,qText: "\\u3058\\u3085\\u3046"}]);
+                                  ,qText: "じゅう"}]);
    var japaneseQuiz = {_: {}
                       ,currentQuestion: 0
                       ,language: Japanese
