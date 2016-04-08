@@ -31,7 +31,7 @@ questionsJ = [
 latinQuiz = new Quiz "Ancient Latin", questionsL
 japaneseQuiz = new Quiz "Japanese", questionsJ
 
-correct = (qs) ->
+numberCorrect = (qs) ->
   isCorrect = (q) -> q.answer is q.guess
 
   cs = q for q in qs when isCorrect q
@@ -39,14 +39,14 @@ correct = (qs) ->
 
 draft = (q) ->
   questionTemplate = $("#question-template").html()
-  theTemplate = Handlebars.compile(questionTemplate)
+  template = Handlebars.compile(questionTemplate)
   c = q.currentQuestion
   u = q.questions[c]
 
   if c < q.questions.length
     Handlebars.registerHelper "check", do (guess) -> if this==guess then "checked" else ""
 
-    $("#question").html theTemplate u
+    $("#question").html template u
 
     if u.guess is ""
       $("#next").attr "disabled", "disabled"
@@ -81,7 +81,7 @@ report () ->
       t = $("#japaneseTotal")
       r = $("#japaneseResults")
 
-  c.text correct quiz.questions
+  c.text numberCorrect quiz.questions
   t.text n
   r.show # Are () necessary here?
   quiz.results = "block"
