@@ -1,39 +1,39 @@
 (function () {
   // The instructions state to store the questions in a json file. But Chrome won't allow loading of local files,
   // and I cannot get it to work in FireFox. So, the questions stay here.
-  var Quiz = function(language, questions) {
+  let Quiz = function(language, questions) {
         this.language = language;
         this.questions = questions;
         this.currentQuestion = 0;
         this.results = "none";
       },
       questionsL = [
-        {language: "Latin", question: "night", choices: ["Iudex", "Nox", "Dies"], answer: "Nox", guess: ""},
-        {language: "Latin", question: "day", choices: ["Canis", "Agricola", "Dies"], answer: "Dies", guess: ""},
-        {language: "Latin", question: "fire", choices: ["Ignis", "Puer", "Puella"], answer: "Ignis", guess: ""},
-        {language: "Latin", question: "boy", choices: ["Nox", "Puer", "Vir"], answer: "Puer", guess: ""},
-        {language: "Latin", question: "girl", choices: ["Puella", "Femina", "Virgis"], answer: "Puella", guess: ""},
-        {language: "English", question: "collum", choices: ["Column", "Neck", "Colon"], answer: "Neck", guess: ""},
-        {language: "English", question: "tuba", choices: ["Trumpet", "Tuba", "Two"], answer: "Trumpet", guess: ""},
-        {language: "English", question: "cave", choices: ["Cave", "Cavern", "Beware"], answer: "Beware", guess: ""},
-        {language: "English", question: "ars", choices: ["Ass", "Arc", "Art"], answer: "Art", guess: ""},
-        {language: "English", question: "vox", choices: ["Voice", "Volume", "Voracious"], answer: "Voice", guess: ""}],
+        { language: "Latin", question: "night", choices: [ "Iudex", "Nox", "Dies" ], answer: "Nox", guess: "" },
+        { language: "Latin", question: "day", choices: [ "Canis", "Agricola", "Dies" ], answer: "Dies", guess: "" },
+        { language: "Latin", question: "fire", choices: [ "Ignis", "Puer", "Puella" ], answer: "Ignis", guess: "" },
+        { language: "Latin", question: "boy", choices: [ "Nox", "Puer", "Vir" ], answer: "Puer", guess: "" },
+        { language: "Latin", question: "girl", choices: [ "Puella", "Femina", "Virgis" ], answer: "Puella", guess: "" },
+        { language: "English", question: "collum", choices: [ "Column", "Neck", "Colon" ], answer: "Neck", guess: "" },
+        { language: "English", question: "tuba", choices: [ "Trumpet", "Tuba", "Two" ], answer: "Trumpet", guess: "" },
+        { language: "English", question: "cave", choices: [ "Cave", "Cavern", "Beware" ], answer: "Beware", guess: "" },
+        { language: "English", question: "ars", choices: [ "Ass", "Arc", "Art" ], answer: "Art", guess: "" },
+        { language: "English", question: "vox", choices: [ "Voice", "Volume", "Voracious" ], answer: "Voice", guess: "" } ],
       questionsJ = [
-        {language: "Japanese", question: "one", choices: ["\u3044\u3061", "\u306B", "\u3055\u3093"], answer: "\u3044\u3061", guess: ""},
-        {language: "Japanese", question: "two", choices: ["\u3044\u3061", "\u306B", "\u3055\u3093"], answer: "\u306B", guess: ""},
-        {language: "Japanese", question: "three", choices: ["\u3044\u3061", "\u306B", "\u3055\u3093"], answer: "\u3055\u3093", guess: ""},
-        {language: "Japanese", question: "four", choices: ["\u3057", "\u3054", "\u308D\u304F"], answer: "\u3057", guess: ""},
-        {language: "Japanese", question: "five", choices: ["\u3057", "\u3054", "\u308D\u304F"], answer: "\u3054", guess: ""},
-        {language: "English", question: "\u308D\u304F", choices: ["four", "five", "six"], answer: "six", guess: ""},
-        {language: "English", question: "\u3057\u3061", choices: ["seven", "eight", "nine"], answer: "seven", guess: ""},
-        {language: "English", question: "\u306F\u3061", choices: ["seven", "eight", "nine"], answer: "eight", guess: ""},
-        {language: "English", question: "\u304F", choices: ["seven", "eight", "nine"], answer: "nine", guess: ""},
-        {language: "English", question: "\u3058\u3085\u3046", choices: ["ten", "eleven", "twelve"], answer: "ten", guess: ""}],
+        { language: "Japanese", question: "one", choices: [ "\u3044\u3061", "\u306B", "\u3055\u3093" ], answer: "\u3044\u3061", guess: "" },
+        { language: "Japanese", question: "two", choices: [ "\u3044\u3061", "\u306B", "\u3055\u3093" ], answer: "\u306B", guess: "" },
+        { language: "Japanese", question: "three", choices: [ "\u3044\u3061", "\u306B", "\u3055\u3093" ], answer: "\u3055\u3093", guess: "" },
+        { language: "Japanese", question: "four", choices: [ "\u3057", "\u3054", "\u308D\u304F" ], answer: "\u3057", guess: "" },
+        { language: "Japanese", question: "five", choices: [ "\u3057", "\u3054", "\u308D\u304F" ], answer: "\u3054", guess: "" },
+        { language: "English", question: "\u308D\u304F", choices: [ "four", "five", "six" ], answer: "six", guess: "" },
+        { language: "English", question: "\u3057\u3061", choices: [ "seven", "eight", "nine" ], answer: "seven", guess: "" },
+        { language: "English", question: "\u306F\u3061", choices: [ "seven", "eight", "nine" ], answer: "eight", guess: "" },
+        { language: "English", question: "\u304F", choices: [ "seven", "eight", "nine" ], answer: "nine", guess: "" },
+        { language: "English", question: "\u3058\u3085\u3046", choices: [ "ten", "eleven", "twelve" ], answer: "ten", guess: "" } ],
       latinQuiz = new Quiz("Ancient Latin", questionsL),
       japaneseQuiz = new Quiz("Japanese", questionsJ),
       quiz = {};
 
-  function correct(qs) {
+  function numberCorrect(qs) {
     function isCorrect(q) {
       return q.answer === q.guess;
     }
@@ -42,31 +42,30 @@
   }
 
   function draft(q) {
-    var questionTemplate = $("#question-template").html(),
+    let questionTemplate = $("#question-template").html(),
         theTemplate = Handlebars.compile(questionTemplate),
         c = q.currentQuestion,
         u = q.questions[c];
 
     if (c < q.questions.length) {
-      Handlebars.registerHelper("check", function(guess) {return this==guess ? "checked" : "";});
+      Handlebars.registerHelper("check", function(guess) { return this===guess ? "checked" : ""; });
 
       $("#question").html(theTemplate(u));
 
-      if (u.guess === "") {
+      if (u.guess === "")
         $("#next").attr("disabled", "disabled");
-      } else {
+      else
         $("#next").removeAttr("disabled");
-      }
 
-      if (c>0) {
+      if (c>0)
         $("#previous").removeAttr("disabled");
-      } else {
+      else
         $("#previous").attr("disabled", "disabled");
-      }
 
-      _.each(_.map(u.choices, function (choice) {return "#"+choice;}),
+      _.each(_.map(u.choices, function (choice) { return "#"+choice; }),
              function(e,i,xs) {
-               $(e).click(function () {$("#next").removeAttr("disabled");});});
+               $(e).click(function () { $("#next").removeAttr("disabled"); });
+             });
 
       $("#form").show(1000);
     } else {
@@ -76,10 +75,9 @@
   }
 
   function report() {
-    var n = quiz.questions.length,
-        c, t, r;
+    let n = quiz.questions.length;
+    var c, t, r;
 
-    //switch ($(".subject:first").text()) {
     switch (quiz.language) {
       case "Ancient Latin":
         c = $("#latinCorrect");
@@ -92,7 +90,7 @@
         r = $("#japaneseResults");
         break;
     }
-    c.text(correct(quiz.questions));
+    c.text(numberCorrect(quiz.questions));
     t.text(n);
     r.show();
     quiz.results = "block";
@@ -107,7 +105,7 @@
 
     quiz.currentQuestion++;
     if (quiz.currentQuestion < quiz.questions.length) {
-      $("#form").hide(250, function () {draft(quiz);});
+      $("#form").hide(250, function () { draft(quiz); });
       $("input:radio").removeAttr("checked");
     } else {
       report();
@@ -122,19 +120,19 @@
   }
 
   function subject(target) {
-    var s = target.toString();
+    let s = target.toString();
     return s.substring(s.indexOf("#")+1);
   }
 
   function switchTabs(e) {
-    var s = $(".subject"),
+    let s = $(".subject"),
         i = $("#intro"),
         f = $("#form"),
         p = $("#progress"),
         lr = $("#latinResults"),
         jr = $("#japaneseResults");
 
-    function showResults(q) {return q.results === "block";}
+    function showResults(q) { return q.results === "block"; }
 
     function showQuiz() {
       i.hide();
