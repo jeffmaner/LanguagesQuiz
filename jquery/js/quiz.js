@@ -43,14 +43,14 @@
 
   function draft(q) {
     let questionTemplate = $("#question-template").html(),
-        theTemplate = Handlebars.compile(questionTemplate),
+        template = Handlebars.compile(questionTemplate),
         c = q.currentQuestion,
         u = q.questions[c];
 
     if (c < q.questions.length) {
       Handlebars.registerHelper("check", function(guess) { return this===guess ? "checked" : ""; });
 
-      $("#question").html(theTemplate(u));
+      $("#question").html(template(u));
 
       if (u.guess === "")
         $("#next").attr("disabled", "disabled");
